@@ -189,7 +189,7 @@ class BlocksScan {
                 confirmed: confirmed,
                 transactions: b.transactions.length,
                 bytes: bytes,
-                timestamp: new Date(b.timestamp).getTime(),
+                timestamp: new Date(b.timestamp + "Z"),
                 witness: b.witness,
                 //witness_signature: b.witness_signature
             })
@@ -207,7 +207,7 @@ class BlocksScan {
                         receiver: "",
                         value: "",
                         token: "",
-                        timestamp: new Date(b.timestamp).getTime(),
+                        timestamp: new Date(b.timestamp + "Z"),
                         operations: tran.operations,
                         operation_results: tran.operation_results
                     });
@@ -268,7 +268,7 @@ class BlocksScan {
         //console.log(res);
         this.status.set({
             head_block_number: res.head_block_number,
-            time: new Date(res.time).getTime(),
+            time: new Date(res.time + "Z"),
             head_block_id: res.head_block_id,
             last_irreversible_block_num: res.last_irreversible_block_num
         })

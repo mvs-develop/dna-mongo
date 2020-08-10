@@ -16,7 +16,7 @@ const Transaction = mongoose.model('transaction', {
     receiver: { type: String },
     value: { type: String },
     token: { type: String },
-    timestamp: { type: Number },
+    timestamp: { type: Date },
 
     operations: { type: Array },
     operation_results: { type: Array },

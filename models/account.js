@@ -10,7 +10,7 @@ const Account = mongoose.model('account', {
     active_key: { type: Array },
     memo_key: { type: String },
 
-    timestamp: { type: Number },
+    timestamp: { type: Date },
 
     //statistics.total_ops
     transactions: { type: Number },

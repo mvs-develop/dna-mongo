@@ -11,7 +11,7 @@ const Block = mongoose.model('block', {
 
     //以下：从rpc接口获取的数据
     previous: { type: String, },
-    timestamp: { type: Number },
+    timestamp: { type: Date },
     witness: { type: String },
     //transaction_merkle_root:String,
     //extensions:Array

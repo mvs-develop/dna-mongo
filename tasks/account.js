@@ -105,7 +105,7 @@ class AccountsScan {
             let accountName = fullAcc.account.name;
 
             //get time
-            let timestamp = new Date(dna.genesisTime).getTime();
+            let timestamp = new Date(dna.genesisTime);
             let ops = await _getAllOps(history_api, accountName);
             //console.log(ops);
             if (ops.length) {

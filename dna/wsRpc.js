@@ -46,7 +46,7 @@ class WsRpc {
             }
         });
 
-        Apis.instance(node.wsRpc, true).init_promise.then((res) => {
+        Apis.instance(node.wsRpc, true, 10000).init_promise.then((res) => {
 
             that._initedInstance = true;
             console.log("ws rpc api connected");

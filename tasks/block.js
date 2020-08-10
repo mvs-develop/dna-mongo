@@ -7,8 +7,8 @@ const dnaUtil = require('../dna/util');
 const { remove } = require('../models/block');
 
 class BlocksScan {
-    constructor(opts) {
-        this.wsRpc = new WsRpc();
+    constructor(opts, wsRpc) {
+        this.wsRpc = wsRpc || new WsRpc();
         this.defaultLoopBlockStatusTime = 1000;//
         this.defaultLoopBlocksTime = 1000;//默认区块扫描间隔时间，1000
         this.fastLoopBlocksTime = 10;//快速区块扫描间隔时间，10
@@ -117,7 +117,7 @@ class BlocksScan {
 
 
         let nowTime = new Date().getTime();
-        let lastTime = that.status.last_scan_time ? 0 : new Date(that.status.last_scan_time).getTime();
+        let lastTime = that.status.last_scan_time ? 0 : that.status.last_scan_time;
         if (nowTime - lastTime > 5000) {
             return that.fastLoopBlocksTime;
         }
@@ -189,7 +189,7 @@ class BlocksScan {
                 confirmed: confirmed,
                 transactions: b.transactions.length,
                 bytes: bytes,
-                timestamp: b.timestamp,
+                timestamp: new Date(b.timestamp).getTime(),
                 witness: b.witness,
                 //witness_signature: b.witness_signature
             })
@@ -207,6 +207,7 @@ class BlocksScan {
                         receiver: "",
                         value: "",
                         token: "",
+                        timestamp: new Date(b.timestamp).getTime(),
                         operations: tran.operations,
                         operation_results: tran.operation_results
                     });
@@ -267,7 +268,7 @@ class BlocksScan {
         //console.log(res);
         this.status.set({
             head_block_number: res.head_block_number,
-            time: res.time,
+            time: new Date(res.time).getTime(),
             head_block_id: res.head_block_id,
             last_irreversible_block_num: res.last_irreversible_block_num
         })

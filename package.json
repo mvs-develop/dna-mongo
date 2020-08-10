@@ -20,8 +20,9 @@
   },
   "homepage": "https://github.com/mvs-develop/dna-mongo#readme",
   "dependencies": {
-    "mongoose": "^5.9.27",
+    "bignumber.js": "^9.0.0",
     "bitsharesjs": "github:mvsdna/dna-bitsharesjs#9eef52ee66d4ecc9026cdc55005c8d8345dba7ba",
-    "bitsharesjs-ws": "github:mvsdna/dna-bitsharesjs-ws#3b49a93aa96b972760ad222607ddb5367ac52e92"
+    "bitsharesjs-ws": "github:mvsdna/dna-bitsharesjs-ws#3b49a93aa96b972760ad222607ddb5367ac52e92",
+    "mongoose": "^5.9.27"
   }
 }

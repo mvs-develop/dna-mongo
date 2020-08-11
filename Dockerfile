@@ -30,6 +30,6 @@ ENV CHAIN_ID ${CHAIN_ID}
 ENV GENESIS_TIME ${GENESIS_TIME}
 ENV WS_RPC ${WS_RPC}
 
-ENV NODE_ENV=production
+ENV NODE_ENV production
 
 CMD node app.js

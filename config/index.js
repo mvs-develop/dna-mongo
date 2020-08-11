@@ -11,8 +11,8 @@ const dna = {
 }
 
 const node = {
-    //wsRpc: process.env.WS_RPC || "wss://mvsdna.info/ws",
-    wsRpc: process.env.WS_RPC || "ws://127.0.0.1:8390"
+    wsRpc: process.env.WS_RPC || "wss://mvsdna.info/ws",
+    //wsRpc: process.env.WS_RPC || "ws://127.0.0.1:8390"
 }
 
 module.exports = {

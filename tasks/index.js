@@ -1,5 +1,6 @@
 const BlocksScan = require('./block');
 const AccountsScan = require('./account');
+const TransactionScan = require('./transaction');
 const WsRpc = require('../dna/wsRpc');
 
 async function start() {
@@ -14,6 +15,10 @@ async function start() {
 
     let accountScan = new AccountsScan({}, wsRpc);
     accountScan.start();
+
+
+    let tranScan = new TransactionScan({}, wsRpc);
+    tranScan.start();
 
 }
 

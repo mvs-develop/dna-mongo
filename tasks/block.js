@@ -3,8 +3,9 @@ const Status = require('../models/status');
 const Block = require('../models/block');
 const Transaction = require('../models/transaction');
 
+const tranType = require('../dicts/tranType');
+
 const dnaUtil = require('../dna/util');
-const { remove } = require('../models/block');
 
 class BlocksScan {
     constructor(opts, wsRpc) {
@@ -203,6 +204,8 @@ class BlocksScan {
                         block_index: j,
                         hash: tranHash,
                         confirmed: confirmed,
+                        checked: false,
+                        // type: tranType.UnKnown,
                         sender: "",
                         receiver: "",
                         value: "",

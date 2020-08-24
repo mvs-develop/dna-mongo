@@ -86,7 +86,7 @@ class AccountsScan {
         if (endGet - startGet >= that.maxScanAccountsCount); {
             endGet = startGet + that.maxScanAccountsCount - 1;
         }
-        console.log(`accountCount:${accountCount},lastAccountId:${lastAccountId},startGet:${startGet},endGet:${endGet}`)
+        //console.log(`accountCount:${accountCount},lastAccountId:${lastAccountId},startGet:${startGet},endGet:${endGet}`)
         if (endGet <= startGet) {
             return this.defaultLoopAccountTime;
         }

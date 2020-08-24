@@ -9,13 +9,15 @@ const Transaction = mongoose.model('transaction', {
     //同区块的确认
     confirmed: { type: Boolean },
 
-
     //以下为后期计算，确认后定时任务计算
     type: { type: String },//类型
     sender: { type: String },
     receiver: { type: String },
     value: { type: String },
     token: { type: String },
+    fee_value: { type: String },
+    fee_token: { type: String },
+
     timestamp: { type: Date },
 
     operations: { type: Array },

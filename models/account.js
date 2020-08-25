@@ -12,6 +12,10 @@ const Account = mongoose.model('account', {
 
     timestamp: { type: Date },
 
+    //最后更新时间，根据这个轮询账户余额等状态
+    //未来账户量大，为了及时更新账户，可以在监控到相关账户交易时，把last_updated设置为空，立即进入下一次轮询刷新
+    last_updated: { type: Date },
+
     //statistics.total_ops
     transactions: { type: Number },
 

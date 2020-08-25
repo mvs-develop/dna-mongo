@@ -20,8 +20,11 @@ class AccountsScan {
     constructor(opts, wsRpc) {
         this.wsRpc = wsRpc || new WsRpc();
         this.defaultLoopAccountTime = 5000;
-        this.fastLoopAccountTime = 100;
-        this.maxScanAccountsCount = 10;
+        this.fastLoopAccountTime = 10;
+
+        this.defaultLoopAccountStatusTime = 300;
+        this.fastLoopAccountStatusTime = 30;
+        this.maxScanAccountsStatusCount = 10;
         this.accountPrefix = "1.2.";
     }
 
@@ -62,8 +65,25 @@ class AccountsScan {
             })
         })();
 
+        (function iteratorAccountsStatus() {
+            that.loopAccountsStatus().then((nextTimeout) => {
+                nextTimeout = nextTimeout || that.defaultLoopAccountStatusTime;
+                setTimeout(() => {
+                    iteratorAccountsStatus();
+                }, nextTimeout)
+            }).catch((err) => {
+                console.log("iteratorAccountsStatus error: " + new Date().toString());
+                console.log(err);
+                let nextTimeout = that.defaultLoopAccountStatusTime;
+                setTimeout(() => {
+                    iteratorAccountsStatus();
+                }, nextTimeout)
+            })
+        })();
+
     }
 
+    //循环获取所有账户
     async loopAccounts() {
         let that = this;
         let instance = await that.wsRpc.instance();
@@ -153,9 +173,9 @@ class AccountsScan {
                 name: accountName,
                 address: accountName,
 
-                owner_key: fullAcc.owner ? fullAcc.owner.key_auths : [],
-                active_key: fullAcc.active ? fullAcc.active.key_auths : [],
-                memo_key: fullAcc.options ? fullAcc.options.memo_key : "",
+                owner_key: fullAcc.account.owner ? fullAcc.account.owner.key_auths : [],
+                active_key: fullAcc.account.active ? fullAcc.account.active.key_auths : [],
+                memo_key: fullAcc.account.options ? fullAcc.account.options.memo_key : "",
 
                 timestamp: timestamp,
 
@@ -166,7 +186,7 @@ class AccountsScan {
                 total_balance: total_balance,
                 available_balance: available_balance,
                 vesting_balance: vesting_balance,
-                votes: fullAcc.options ? fullAcc.options.votes : []
+                votes: fullAcc.account.options ? fullAcc.account.options.votes : []
             };
             insertAccounts.push(acc);
         }
@@ -185,6 +205,83 @@ class AccountsScan {
         }
 
         return that.defaultLoopAccountTime;
+    }
+
+    //循环更新账户状态：余额等
+    async loopAccountsStatus() {
+        let that = this;
+        let accs = await Account.find({
+        }).limit(that.maxScanAccountsStatusCount)
+            .sort({ last_updated: 1 });
+
+        if (!accs.length) {
+            return that.defaultLoopAccountStatusTime;
+        }
+
+        let accountIds = accs.map(it => it.id);
+
+        let instance = await that.wsRpc.instance();
+        let db_api = instance.db_api();
+        let fullAccountResults = await db_api.exec("get_full_accounts", [accountIds]);
+
+        var bulk = Account.collection.initializeOrderedBulkOp();
+        for (var i = 0; i < fullAccountResults.length; i++) {
+            let fullAccId = fullAccountResults[i][0];
+            let fullAcc = fullAccountResults[i][1];
+            let dbAccount = accs.find(it => it.id == fullAccId);
+            if (!dbAccount) {
+                continue;
+            }
+
+            let available_balance = new BigNumber(0);
+            if (fullAcc.balances && fullAcc.balances.length) {
+                fullAcc.balances = fullAcc.balances.filter(it => it.asset_type == dna.coreTokenId);
+                for (let b = 0; b < fullAcc.balances.length; b++) {
+                    available_balance = available_balance.plus(fullAcc.balances[b].balance);
+                }
+            }
+
+            let vesting_balance = new BigNumber(0);
+            if (fullAcc.vesting_balances && fullAcc.vesting_balances.length) {
+                fullAcc.vesting_balances = fullAcc.vesting_balances.filter(it => it.balance.asset_id == dna.coreTokenId);
+                for (let b = 0; b < fullAcc.vesting_balances.length; b++) {
+                    vesting_balance = vesting_balance.plus(fullAcc.vesting_balances[b].balance.amount);
+                }
+            }
+
+            let total_balance = available_balance.plus(vesting_balance).toFixed(0);
+            available_balance = available_balance.toFixed(0);
+            vesting_balance = vesting_balance.toFixed(0);
+
+            let upObj = {
+                last_updated: new Date()
+            };
+
+            upObj.owner_key = fullAcc.account.owner ? fullAcc.account.owner.key_auths : [];
+            upObj.active_key = fullAcc.account.active ? fullAcc.account.active.key_auths : [];
+            upObj.memo_key =  fullAcc.account.options ? fullAcc.account.options.memo_key : "";
+
+            //statistics.total_ops
+            upObj.transactions = fullAcc.statistics ? fullAcc.statistics.total_ops : 0;
+
+            //目前只显示DNA代币
+            upObj.total_balance = total_balance;
+            upObj.available_balance = available_balance;
+            upObj.vesting_balance = vesting_balance;
+            upObj.votes = fullAcc.account.options ? fullAcc.account.options.votes : [];
+
+            bulk.find({ id: dbAccount.id }).updateOne({
+                "$set": upObj
+            });
+        }
+
+        await bulk.execute();
+        //console.log("update account:" + accs.length);
+
+        if (accs.length >= accs.maxScanAccountsStatusCount) {
+            return that.fastLoopAccountStatusTime;
+        }
+        return that.defaultLoopAccountStatusTime;
     }
 }
 

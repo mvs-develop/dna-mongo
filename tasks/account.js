@@ -193,9 +193,9 @@ class AccountsScan {
         if (insertAccounts.length) {
             var bulk = Account.collection.initializeOrderedBulkOp();
             for (var i = 0; i < insertAccounts.length; i++) {
-                bulk.find({ id: insertAccounts[i].id }).upsert().updateOne(
-                    insertAccounts[i]
-                );
+                bulk.find({ id: insertAccounts[i].id }).upsert().updateOne({
+                    $set: insertAccounts[i]
+                });
             }
             await bulk.execute();
         }
@@ -259,7 +259,7 @@ class AccountsScan {
 
             upObj.owner_key = fullAcc.account.owner ? fullAcc.account.owner.key_auths : [];
             upObj.active_key = fullAcc.account.active ? fullAcc.account.active.key_auths : [];
-            upObj.memo_key =  fullAcc.account.options ? fullAcc.account.options.memo_key : "";
+            upObj.memo_key = fullAcc.account.options ? fullAcc.account.options.memo_key : "";
 
             //statistics.total_ops
             upObj.transactions = fullAcc.statistics ? fullAcc.statistics.total_ops : 0;

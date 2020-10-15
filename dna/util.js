@@ -1,5 +1,6 @@
 
 const { ops, hash } = require("bitsharesjs");
+const { v4: uuidv4, v4 } = require('uuid');
 
 // function getBlockHash(block) {
 //     delete block.witness_signature;
@@ -11,23 +12,25 @@ const { ops, hash } = require("bitsharesjs");
 // }
 
 async function getTransactionHash(instance, tran) {
-    //try {
-    let tran1 = await instance.db_api().exec("get_transaction_hex", [tran]);
-    var tran2 = ops.transaction.fromHex(tran1);
-    var tran3 = ops.transaction.toBuffer(tran2)
-    var id = hash.sha256(tran3).toString('hex').substring(0, 40);
-    //let obj = ops.signed_transaction.fromObject(tran);
-    return id;
-    // } catch (err) {
-    //     console.log('transaction toBuffer error:' + err.message);
-    //     let tran1 = await instance.db_api().exec("get_transaction", [block_height, block_index]);
-    //     var tran3 = ops.transaction.fromHex(tran2);
-    //     var tranBuf = ops.transaction.toBuffer(tran3);
-    //     var id = hash.sha256(tranBuf).toString('hex').substring(0, 40);
-    //     console.log('find in rpc:' + id);
-    //     return id;
+    try {
+        let tran1 = await instance.db_api().exec("get_transaction_hex", [tran]);
+        var tran2 = ops.transaction.fromHex(tran1);
+        var tran3 = ops.transaction.toBuffer(tran2)
+        var id = hash.sha256(tran3).toString('hex').substring(0, 40);
+        //let obj = ops.signed_transaction.fromObject(tran);
+        return id;
+    } catch (err) {
+        console.log('transaction toBuffer error:' + err.message);
+        console.log(JSON.stringify(tran));
+        return 'random-' + v4().toString();
+        //     let tran1 = await instance.db_api().exec("get_transaction", [block_height, block_index]);
+        //     var tran3 = ops.transaction.fromHex(tran2);
+        //     var tranBuf = ops.transaction.toBuffer(tran3);
+        //     var id = hash.sha256(tranBuf).toString('hex').substring(0, 40);
+        //     console.log('find in rpc:' + id);
+        //     return id;
 
-    // }
+    }
 }
 
 function getBlockBytes(block) {

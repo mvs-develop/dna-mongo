@@ -222,9 +222,9 @@ class BlocksScan {
             var bulk = Block.collection.initializeOrderedBulkOp();
             let insertLength = isCheckConfirm ? insertBlocks.length - 1 : insertBlocks.length
             for (var i = 0; i < insertLength; i++) {
-                bulk.find({ height: insertBlocks[i].height }).upsert().updateOne(
-                    insertBlocks[i]
-                );
+                bulk.find({ height: insertBlocks[i].height }).upsert().updateOne({
+                    $set: insertBlocks[i]
+                });
             }
             await bulk.execute();
 
@@ -248,9 +248,9 @@ class BlocksScan {
         if (insertTrans.length) {
             var bulk = Transaction.collection.initializeOrderedBulkOp();
             for (var i = 0; i < insertTrans.length; i++) {
-                bulk.find({ hash: insertTrans[i].hash }).upsert().updateOne(
-                    insertTrans[i]
-                );
+                bulk.find({ hash: insertTrans[i].hash }).upsert().updateOne({
+                    $set: insertTrans[i]
+                });
             }
             await bulk.execute();
         }

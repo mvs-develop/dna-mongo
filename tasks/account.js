@@ -26,6 +26,8 @@ class AccountsScan {
         this.fastLoopAccountStatusTime = 30;
         this.maxScanAccountsStatusCount = 10;
         this.accountPrefix = "1.2.";
+
+        this.maxScanAccountsCount = 10;
     }
 
     async init() {
@@ -106,7 +108,7 @@ class AccountsScan {
         if (endGet - startGet >= that.maxScanAccountsCount); {
             endGet = startGet + that.maxScanAccountsCount - 1;
         }
-        //console.log(`accountCount:${accountCount},lastAccountId:${lastAccountId},startGet:${startGet},endGet:${endGet}`)
+        console.log(`accountCount:${accountCount},lastAccountId:${lastAccountId},startGet:${startGet},endGet:${endGet}`)
         if (endGet <= startGet) {
             return this.defaultLoopAccountTime;
         }

@@ -1,5 +1,8 @@
+let isProd = process.env.NODE_ENV == "production";
+
 const db = {
-    mongodb: process.env.MONGODB || "mongodb://mongo:mongo@localhost/dnamongo?authSource=admin"
+    mongodb: process.env.MONGODB || "mongodb://localhost/dnamongoloan?authSource=admin"
+    //mongodb: process.env.MONGODB || "mongodb://mongo:mongo@localhost/dnamongo?authSource=admin"
 }
 
 const dna = {
@@ -11,8 +14,8 @@ const dna = {
 }
 
 const node = {
-    wsRpc: process.env.WS_RPC || "wss://mvsdna.info/ws",
-    //wsRpc: process.env.WS_RPC || "ws://127.0.0.1:8390"
+    wsRpc: process.env.WS_RPC || "wss://explorer.mvsdnadev.com/wsloan",
+    //wsRpc: process.env.WS_RPC || "wss://mvsdna.info/ws",
 }
 
 module.exports = {

@@ -205,6 +205,7 @@ class BlocksScan {
                         hash: tranHash,
                         confirmed: confirmed,
                         checked: false,
+                        loan_checked: false,
                         // type: tranType.UnKnown,
                         sender: "",
                         receiver: "",

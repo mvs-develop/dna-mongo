@@ -24,6 +24,7 @@
     "bignumber.js": "^9.0.0",
     "bitsharesjs": "github:mvs-develop/dna-js#dna",
     "bitsharesjs-ws": "github:mvs-develop/dna-ws-js#dna",
+    "moment": "^2.29.1",
     "mongoose": "^5.9.27",
     "uuid": "^8.3.1"
   }

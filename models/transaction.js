@@ -18,14 +18,19 @@ const Transaction = mongoose.model('transaction', {
     fee_value: { type: String },
     fee_token: { type: String },
 
+    operation_type: { type: Number },
+
     timestamp: { type: Date },
 
     operations: { type: Array },
     operation_results: { type: Array },
 
+
     //是否已经检查过
     //单个任务检查交易，把交易的影响（如创建账户）写入数据库
-    checked: { type: Boolean }
+    checked: { type: Boolean },
+
+    loan_checked: { type: Boolean },
 
 });
 

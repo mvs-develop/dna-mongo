@@ -136,7 +136,7 @@ class WsRpc {
     updateListener(objects) {
         //console.log("updateListener:" + objects.length);
         let that = this;
-        objects = objects.flat();
+        // objects = objects.flat();
         for (let i = 0; i < objects.length; i++) {
             let obj = objects[i];
             // console.log("updateListener:" + obj.id);

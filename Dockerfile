@@ -4,7 +4,17 @@ ADD ./ /data/dna-mongo
 
 WORKDIR /data/dna-mongo
 
-RUN npm install
+RUN yarn install
+WORKDIR /data/dna-mongo/node_modules/bitsharesjs-ws
+RUN yarn install 
+RUN yarn build
+WORKDIR /data/dna-mongo/node_modules/bitsharesjs
+RUN yarn install --ignore-scripts
+RUN cp -rf /data/dna-mongo/node_modules/bitsharesjs-ws /data/dna-mongo/node_modules/bitsharesjs/node_modules/
+RUN yarn  build
+
+
+WORKDIR /data/dna-mongo
 
 # "mongodb://mongo:mongo@localhost/dnamongo?authSource=admin"
 ARG MONGODB

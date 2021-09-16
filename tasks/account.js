@@ -68,19 +68,19 @@ class AccountsScan {
         })();
 
         (function iteratorAccountsStatus() {
-            that.loopAccountsStatus().then((nextTimeout) => {
-                nextTimeout = nextTimeout || that.defaultLoopAccountStatusTime;
-                setTimeout(() => {
-                    iteratorAccountsStatus();
-                }, nextTimeout)
-            }).catch((err) => {
-                console.log("iteratorAccountsStatus error: " + new Date().toString());
-                console.log(err);
-                let nextTimeout = that.defaultLoopAccountStatusTime;
-                setTimeout(() => {
-                    iteratorAccountsStatus();
-                }, nextTimeout)
-            })
+            // that.loopAccountsStatus().then((nextTimeout) => {
+            //     nextTimeout = nextTimeout || that.defaultLoopAccountStatusTime;
+            //     setTimeout(() => {
+            //         iteratorAccountsStatus();
+            //     }, nextTimeout)
+            // }).catch((err) => {
+            //     console.log("iteratorAccountsStatus error: " + new Date().toString());
+            //     console.log(err);
+            //     let nextTimeout = that.defaultLoopAccountStatusTime;
+            //     setTimeout(() => {
+            //         iteratorAccountsStatus();
+            //     }, nextTimeout)
+            // })
         })();
 
     }
